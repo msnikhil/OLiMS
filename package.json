@@ -1,0 +1,25 @@
+{
+  "name": "olims",
+  "version": "1.0.0",
+  "description": "Online library management system. ",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/msnikhil/OLiMS.git"
+  },
+  "author": "M.S. Nikhil",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/msnikhil/OLiMS/issues"
+  },
+  "homepage": "https://github.com/msnikhil/OLiMS#readme",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "mongoose": "^4.11.0"
+  }
+}
