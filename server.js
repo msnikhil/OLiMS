@@ -10,9 +10,10 @@ var bodyParser     = require('body-parser');
     
 // config files
 var db = require('./config/db');
+var envVal = require('./config/envValues.js');
 
 // set our port
-var port = process.env.PORT || 8080; 
+var port = envVal.PORT || process.env.PORT || 8080; 
 
 // connect to our mongoDB database 
 // (uncomment after you enter in your own credentials in config/db.js)

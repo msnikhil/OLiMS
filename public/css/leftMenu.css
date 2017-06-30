@@ -1,0 +1,38 @@
+.menuCont{
+    width: 200px;
+    position: fixed;
+    top: 60px;
+    height: 100vh;
+    background-color: #1c2b36;
+    z-index: 10;
+}
+.menuCont ul{
+    list-style: none;
+    margin-top: 40px;
+    padding: 0px;
+}
+.menuCont ul a{
+    text-decoration: none;
+    color: #7793a7;
+    padding: 25px 15px;
+    font-size: 14px;
+    font-weight: 700;
+    display: block;
+    font-family: HelveticaNeue-roman;
+}
+.menuCont ul a:hover{
+    color: #fff;
+    background-color: #16232d;
+}
+.menuCont .selected{
+    color: #fff;
+    background-color: #000;
+}
+.menuCont ul a i{
+    width: 50px;
+    margin: -15px -10px;
+    text-align: center;
+    line-height: 50px;
+    float: left;
+    margin-right: 0px;
+}

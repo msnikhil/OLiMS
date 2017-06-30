@@ -21,13 +21,16 @@ exports.addNewBook = function(req, res){
     var resJson = {};
     var name = req.body.name;
     var author = req.body.author;
+    console.log("\nrequest data:",req.body);
     if(name){
         if(author){
             var newBook = new Books();
             newBook.name = name;
             newBook.author = author;
+            console.log("Creating book...");
             Books.create(newBook, function(err, resp){
                 if(err){
+                    console.log("[Error] - POST Books:", err);
                     resJson.status = 0;
                     resJson.msg = 'Error in adding new book to the database.';
                     res.send(resJson);
@@ -35,12 +38,13 @@ exports.addNewBook = function(req, res){
                 else{
                     resJson.status = 1;
                     resJson.msg = 'Book added successfully.';
+                    res.send(resJson);
                 }
             });
         }
         else{
             resJson.status = 0;
-            resJson.msg = "'name' cannot be empty.";
+            resJson.msg = "'author' cannot be empty.";
             res.send(resJson);
         }
     }

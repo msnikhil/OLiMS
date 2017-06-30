@@ -1,6 +1,6 @@
 var bookCtrl = require('../app/controllers/BooksController.js');
 // var userCtrl = require('../app/controllers/UsersController.js');
-// var adminCtrl = require('controllers/AdminController.js');
+var adminCtrl = require('../app/controllers/AdminController.js');
 var transCtrl = require('../app/controllers/TransactionsController.js');
 
 module.exports = function(app){
@@ -20,5 +20,11 @@ module.exports = function(app){
 
     app.route('/api/Transaction/:transId')
         .get(transCtrl.getTransaction);
+
+    app.route('/api/login')
+        .get(adminCtrl.isAdmin)
+
+    app.route('/api/signup')
+        .post(adminCtrl.addAdmin);
         
 }

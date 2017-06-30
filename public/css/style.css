@@ -1,0 +1,33 @@
+@font-face{
+    font-family: 'HelveticaNeue';
+    src: url("../fonts/Helvetica/helvetica-neue.ttf");
+}
+
+@font-face{
+    font-family: 'HelveticaNeue-Medium';
+    src: url("../fonts/Helvetica/helvetica-neue-medium.ttf");
+}
+
+@font-face{
+    font-family: 'HelveticaNeue-Light';
+    src: url("../fonts/Helvetica/helvetica-neue-light.ttf");
+}
+
+@font-face{
+    font-family: 'HelveticaNeue-Bold';
+    src: url("../fonts/Helvetica/helvetica-neue-bold.ttf");
+}
+
+@font-face{
+    font-family: 'HelveticaNeue-Roman';
+    src: url("../fonts/Helvetica/helvetica-55-roman.ttf");
+}
+
+a{
+    cursor: pointer;
+}
+
+.app-content{
+    margin-left: 200px;
+    margin-top: 60px;
+}
