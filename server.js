@@ -4,6 +4,7 @@
 var express        = require('express');
 var app            = express();
 var bodyParser     = require('body-parser');
+var mongoose       = require('mongoose');
 //var methodOverride = require('method-override');
 
 // configuration ===========================================
@@ -16,8 +17,17 @@ var envVal = require('./config/envValues.js');
 var port = envVal.PORT || process.env.PORT || 8080; 
 
 // connect to our mongoDB database 
-// (uncomment after you enter in your own credentials in config/db.js)
-// mongoose.connect(db.url); 
+mongoose.connect(db.url); 
+
+mongoose.connection.on('open', function(){
+    console.log("\tConnected to database....");
+});
+
+mongoose.connection.on('error', function(err){
+    console.log("\tCouldn't connect to database.");
+    console.log("error:", err);
+})
+console.log("Database state:",mongoose.connection.readyState);
 
 // get all data/stuff of the body (POST) parameters
 // parse application/json 

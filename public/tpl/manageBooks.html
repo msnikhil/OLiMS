@@ -1,3 +1,51 @@
-<div>
-    Manage Books page
+<link rel="stylesheet" type="text/css" href="../css/manageBooks.css">
+<div class="wrapper-md">
+    <div class="panel panel-default">
+        <div class="panel-heading"> 
+            <div class="clearfix">
+                <div class="pull-left">Manage Books</div>
+                <button type="button" class="btn btn-primary pull-right">Add New Book</button>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="wrapper">
+                <div class="pageActions">
+                    <div class="searchFieldCont">
+                        <div class="searchField pull-left">
+                            <input type="text" class="form-control" placeholder="Search Books">
+                            <i class="glyphicon glyphicon-search"></i>
+                        </div>
+                        <span class="searchFieldOptions">
+                            <label class="radio-inline"><input type="radio" name="optradio" checked>By Name</label>
+                            <label class="radio-inline"><input type="radio" name="optradio">By Author</label>
+                        </span>
+                    </div>
+                </div>
+                <div class="booklistCont wrapper">
+                    <h3>All Books</h3>
+                    <div class="panel-group">
+                        <div class="panel panel-default">
+                            <div class="panel-body bookCont">
+                                <div class="statusDot available">
+                                    <i class="fa fa-circle" aria-hidden="true"></i>
+                                </div>
+                                <div class="bookInfoCont">
+                                    <div class="bookName">
+                                        Meluha
+                                    </div>
+                                    <div class="bookAuthor text-italic">
+                                        <i>By: Amish Tripathi</i>
+                                    </div>
+                                </div>
+                                <div class="bookActionCont hidden">
+                                    <button type="button" class="btn btn-success">Issue</button>
+                                    <button type="button" class="btn btn-danger">Return</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

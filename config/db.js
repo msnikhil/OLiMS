@@ -1,3 +1,3 @@
 module.exports = {
-        url : 'mongodb://localhost:8080/OLiMS/app/data'
+        url : 'mongodb://127.0.0.1:27017/OLiMS/app/data'
     }

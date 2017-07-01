@@ -7,7 +7,10 @@ var Schema = mongoose.Schema;
 var BookSchema = new Schema({
     name : {type : String, default: ''},
     author: {type: String, default: ''},
-    is_available: {type: Boolean, default: true}
+    is_issued: {type: Boolean, default: false},
+    issued_to: {type: String, default: ''},
+    due_date: {type: String, default: ''},
+    is_removed: {type: Boolean, default: false}
 });
 
 // define our books model
