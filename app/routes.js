@@ -15,23 +15,22 @@ module.exports = function(app){
         // .put(bookCtrl.updateBook)
         .delete(bookCtrl.deleteBook);
 
-    app.route('/api/Books/issueBook')
+    // Transactions API
+    app.route('/api/Transactions/issueBook')
         .post(transCtrl.issueBook);
 
-    app.route('/api/Books/returnBook/:bookId')
-        .post(transCtrl.returnBook);
+    app.route('/api/Transactions/returnBook/:bookId')
+        .get(transCtrl.returnBook);
 
-    // Transactions API
-    app.route('/api/Transaction')
+    app.route('/api/Transactions')
         .get(transCtrl.getAllTransactions)
-        // .post(transCtrl.addTransaction);
 
-    app.route('/api/Transaction/:transId')
+    app.route('/api/Transactions/:transId')
         .get(transCtrl.getTransaction);
 
     // Admin API
     app.route('/api/login')
-        .get(adminCtrl.isAdmin)
+        .post(adminCtrl.isAdmin)
 
     app.route('/api/signup/admin')
         .post(adminCtrl.addAdmin);
@@ -46,4 +45,9 @@ module.exports = function(app){
     app.route('/api/Users/:userId')
         .get(userCtrl.getUser);
 
+    // frontend routes =========================================================
+    // route to handle all angular requests
+    app.get('*', function(req, res) {
+        res.sendfile('./public/index.html'); // load our public/index.html file
+    });
 }

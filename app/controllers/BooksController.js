@@ -5,7 +5,7 @@ var ObjectId = mongoose.Types.ObjectId;
 exports.getAllBooks = function(req, res){
     var resJson = {};
 
-    Books.find({"is_removed": false}, function(err, bookData){
+    Books.find({}, function(err, bookData){
         if(err){
             console.log("[Error] - GET /Books:", err);
             resJson.status = 0;
@@ -72,7 +72,7 @@ exports.getBook = function(req, res){
     var book_id = req.params.bookId;
 
     if(book_id){
-        Books.findOne(new ObjectId(book_id), function(err, doc){
+        Books.findOne({ _id: new ObjectId(book_id)}, function(err, doc){
             if(err){
                 retJson.status = 0;
                 retJson.msg = 'Error in fetching data from database.';
@@ -108,7 +108,7 @@ exports.updateBook = function(req, res){
     var bookData = req.body;
 
     if(book_id){
-        Books.findOneAndUpdate(new ObjectId(book_id), bookData, {new: true}, function(err, doc){
+        Books.findOneAndUpdate({ _id: new ObjectId(book_id)}, bookData, {new: true}, function(err, doc){
             if(err){
                 retJson.status = 0;
                 retjson.msg = 'Error in updating book in database.';
@@ -135,56 +135,58 @@ exports.deleteBook = function(req, res){
     var book_id = req.params.bookId;
 
     if(book_id){
-        Books.findOne(new ObjectId(book_id), deleteBook_isIssuedCB(err, doc));
+        Books.findOne({ _id: new ObjectId(book_id)}, deleteBook_isIssuedCB);
     }
     else{
         retJson.status = 0;
         retJson.msg = "'book_id' is required.";
         res.send(retJson);
     }
-}
 
-function deleteBook_isIssuedCB(err, doc){
-    if(err){
-        retJson.status = 0;
-        retJson.msg = "Error during removing data from database.";
-        res.send(retJson);
-    }
-    else{
-        if(doc){
-            //If Book is issued, mark 'is_removed'
-            if(doc.is_issued){
-                Books.update(new ObjectId(book_id), {$set:{"is_removed": true}}, function(updtErr, updtDoc){
-                    if(updtErr){
-                        console.log("[Error] - DELETE api/Books/:bookId(update):",updtErr);
-                        retJson.status = 0;
-                        retJson.msg = "Couldn't remove book from the system.";
-                        res.send(retJson);
-                    }
-                    else{
-                        retJson.status = 1;
-                        retJson.msg = "Book removed from system.";
-                        res.send(retJson);
-                    }
-                })
-            }
-            //If book is not issued, remove from the system.
-            else{
-                Books.remove(new ObjectId(book_id), function(remErr, remDoc){
-                    if(remErr){
-                        console.log("[Error] - DELETE api/Books/:bookId(remove):",remErr);
-                        retJson.status = 0;
-                        retJson.msg = "Couldn't remove book from the system.";
-                        res.send(retJson);
-                    }
-                    else{
-                        retJson.status = 1;
-                        retJson.msg = "Book removed from system.";
-                        retJson.data = remDoc;
-                        res.send(retJson);
-                    }
-                })
+    function deleteBook_isIssuedCB(err, doc){
+        
+        if(err){
+            retJson.status = 0;
+            retJson.msg = "Error during removing data from database.";
+            res.send(retJson);
+        }
+        else{
+            if(doc){
+                //If Book is issued, mark 'is_removed'
+                if(doc.is_issued){
+                    Books.update({_id: doc._id}, {$set:{"is_removed": true}}, function(updtErr, updtDoc){
+                        if(updtErr){
+                            console.log("[Error] - DELETE api/Books/:bookId(update):",updtErr);
+                            retJson.status = 0;
+                            retJson.msg = "Couldn't remove book from the system.";
+                            res.send(retJson);
+                        }
+                        else{
+                            retJson.status = 1;
+                            retJson.msg = "Book removed from system.";
+                            res.send(retJson);
+                        }
+                    })
+                }
+                //If book is not issued, remove from the system.
+                else{
+                    Books.remove({_id: doc._id}, function(remErr, remDoc){
+                        if(remErr){
+                            console.log("[Error] - DELETE api/Books/:bookId(remove):",remErr);
+                            retJson.status = 0;
+                            retJson.msg = "Couldn't remove book from the system.";
+                            res.send(retJson);
+                        }
+                        else{
+                            retJson.status = 1;
+                            retJson.msg = "Book removed from system.";
+                            retJson.data = remDoc;
+                            res.send(retJson);
+                        }
+                    })
+                }
             }
         }
     }
 }
+

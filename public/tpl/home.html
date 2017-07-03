@@ -1,8 +1,9 @@
 
 <link rel="stylesheet" type="text/css" href="../css/home.css">
 
-<div class="wrapper-md">
-    <div class="panel panel-default">
+<toaster-container></toaster-container>
+<div class="wrapper-md fill">
+    <div class="panel panel-default fill">
         <div class="panel-heading"> 
             <div>Issue / Return Books</div>
         </div>
@@ -11,40 +12,42 @@
                 <div class="pageActions">
                     <div class="searchFieldCont">
                         <div class="searchField pull-left">
-                            <input type="text" class="form-control" placeholder="Search Books">
+                            <input type="text" class="form-control" placeholder="Search Books" ng-model="searchBookInput">
                             <i class="glyphicon glyphicon-search"></i>
                         </div>
                         <span class="searchFieldOptions">
-                            <label class="radio-inline"><input type="radio" name="optsearch" checked>By Name</label>
-                            <label class="radio-inline"><input type="radio" name="optsearch">By Author</label>
+                            <label class="radio-inline"><input type="radio" name="optsearch" ng-checked="searchOpt" ng-model="searchOpt" value="name">By Name</label>
+                            <label class="radio-inline"><input type="radio" name="optsearch" ng-checked="searchOpt" ng-model="searchOpt" value="author">By Author</label>
                         </span>
                     </div>
                     <div class="filterOptionsCont">
                         Filter:
-                        <label class="radio-inline m-l-md"><input type="radio" name="optfilter" checked>All</label>
-                        <label class="radio-inline"><input type="radio" name="optfilter">Available</label>
-                        <label class="radio-inline"><input type="radio" name="optfilter">Issued</label>                        
+                        <label class="radio-inline m-l-md"><input type="radio" name="optfilter" ng-checked="filterOpt" ng-model="filterOpt" value="all">All</label>
+                        <label class="radio-inline"><input type="radio" name="optfilter" ng-checked="filterOpt" ng-model="filterOpt" value="available">Available</label>
+                        <label class="radio-inline"><input type="radio" name="optfilter" ng-checked="filterOpt" ng-model="filterOpt" value="issued">Issued</label>                        
                     </div>
                 </div>
                 <div class="booklistCont wrapper">
-                    <h3>All Books</h3>
+                    <h3 ng-show="filterOpt == 'all'">All Books</h3>
+                    <h3 ng-show="filterOpt == 'available'">Available Books</h3>
+                    <h3 ng-show="filterOpt == 'issued'">Issued Books</h3>
                     <div class="panel-group">
-                        <div class="panel panel-default">
+                        <div class="panel panel-default" ng-repeat="book in allBooks | booksIssuedFilter: filterOpt | searchBookFilter: searchOpt: searchBookInput">
                             <div class="panel-body bookCont">
-                                <div class="statusDot available">
+                                <div class="statusDot" ng-class="{available: !book.is_issued, issued: book.is_issued}">
                                     <i class="fa fa-circle" aria-hidden="true"></i>
                                 </div>
                                 <div class="bookInfoCont">
-                                    <div class="bookName">
-                                        Meluha
+                                    <div class="bookName" ng-bind="book.name">
+                                        
                                     </div>
-                                    <div class="bookAuthor text-italic">
-                                        <i>By: Amish Tripathi</i>
+                                    <div class="bookAuthor">
+                                        <i>By: {{book.author}}</i>
                                     </div>
                                 </div>
                                 <div class="bookActionCont">
-                                    <button type="button" class="btn btn-success">Issue</button>
-                                    <button type="button" class="btn btn-danger">Return</button>
+                                    <button type="button" class="btn btn-success" ng-show="!book.is_issued" ng-click="issueBook(book._id)">Issue</button>
+                                    <button type="button" class="btn btn-danger" ng-show="book.is_issued" ng-click="returnBook(book._id)">Return</button>
                                 </div>
                             </div>
                         </div>

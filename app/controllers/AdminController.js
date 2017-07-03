@@ -10,7 +10,14 @@ exports.isAdmin = function(req, res){
     if(username){
         if(password){
             Admin.findOne({username: username}, function(err, doc){
-                if(doc){
+                if(err){
+                    console.log("[Error] - isAdmin() => Error getting data");
+                    console.log("\t", err);
+                    retJson.status = 0;
+                    retJson.msg = "Couldn't fetch data from database.";
+                    res.send(retJson);
+                }
+                else if(doc){
                     if(doc.password == password){
                         retJson.status = 1;
                         retJson.msg = 'Admin credentials verified.';
@@ -18,12 +25,14 @@ exports.isAdmin = function(req, res){
                     }
                     else{
                         retJson.status = 0;
-                        retJson.msg = 'No such admin found.';
+                        retJson.msg = "Passwords don't match.";
                         res.send(retJson);
                     }
                 }
                 else{
-                    console.log("Find admin DB result-> doc empty");
+                    retJson.status = 0;
+                    retJson.msg = 'No such admin found.';
+                    res.send(retJson);
                 }
                 
             });

@@ -27,58 +27,12 @@ exports.getAllTransactions = function(req, res){
     })
 }
 
-exports.addTransaction = function(req, res){
-    var retJson = {};
-    var transData = req.body;
-
-    if(transData.issued_to){
-        if(transData.book_details){
-            if(transData.due_date){
-                if(transData.transaction_type){
-                    Transactions.create(transData, function(err, doc){
-                        if(err){
-                            retJson.status = 0;
-                            retJson.msg = "Error in creating transaction in database.";
-                            res.send(retJson);
-                        }
-                        else{
-                            retJson.status = 1;
-                            retJson.msg = "Transaction added successfully to database.";
-                            res.send(retJson);
-                        }
-                    });
-                }
-                else{
-                    retJson.status = 0;
-                    retJson.msg = "'transaction_type' is empty.";
-                    res.send(retJson);
-                }
-            }
-            else{
-                retJson.status = 0;
-                retJson.msg = "'due_date' is empty.";
-                res.send(retJson);
-            }
-        }
-        else{
-            retJson.status = 0;
-            retJson.msg = "'book_details' is empty.";
-            res.send(retJson);
-        }
-    }
-    else{
-        retJson.status = 0;
-        retJson.msg = "'issued_to' is empty.";
-        res.send(retJson);
-    }
-}
-
 exports.getTransaction = function(req, res){
     var retJson = {};
-    var trans_id = new ObjectId(req.params.transId);
+    var trans_id = req.params.transId;
 
     if(trans_id){
-        Transactions.findOne(trans_id)
+        Transactions.findOne({_id: new ObjectId(trans_id)})
         .populate('issued_to book_details')
         .exec(function(err, doc){
             if(err){
@@ -105,23 +59,49 @@ exports.getTransaction = function(req, res){
 exports.issueBook = function(req, res){
     var retJson = {};
 
-    var reqValidator = requestIssueBookDV(req);
+    var reqValidator = requestIssueBookDV(req.body);
 
     if(reqValidator.valid){
         var transObj = {
             issued_to: req.body.user_id,
             book_details: req.body.book_id,
             due_date: req.body.due_date,
-            transaction_type: 'Issue'
+            type: 'Issue'
         }
         // Create a transaction.
-        Transactions.create(transObj, createTransaction_issueBookCB(err, doc));
+        Transactions.create(transObj, createTransaction_issueBookCB);
     }
     else{
         console.log("[Error] - POST api/Transactions/issueBook => request validator:", reqValidator);
         retJson.status = 0;
         retJson.msg = reqValidator.msg;
         res.send(retJson);
+    }
+
+    function createTransaction_issueBookCB(err, doc){
+        if(err){
+            console.log("[Error] - POST api/Transactions/issueBook => create transaction:", err);
+            retJson.status = 0;
+            retJson.msg = "Error in issuing book.";
+            res.send(retJson);
+        }
+        else{
+            //Update Books collection with the transaction data.
+            Books.findOneAndUpdate({_id: new ObjectId(req.body.book_id)},
+                {$set:{"is_issued": true, "issued_to": req.body.user_id, "due_date": req.body.due_date}},
+                function(bookErr, bookDoc){
+                if(bookErr){
+                    console.log("[Error] - POST api/Transactions/issueBook => update book collection:", bookErr);
+                    retJson.status = 0;
+                    retJson.msg = "Error in marking book as 'issued'";
+                }
+                else{
+                    retJson.status = 1;
+                    retJson.msg = "Book issued successfully.";
+                    res.send(retJson);
+                }
+            });
+        }
     }
 }
 
@@ -133,7 +113,7 @@ exports.returnBook = function(req, res){
     var is_removed = false;
 
     if(book_id){
-        Books.findOne(new ObjectId(book_id), function(err, doc){
+        Books.findOne({_id: new ObjectId(book_id)}, function(err, doc){
             if(err){
                 console.log("[Error] - POST api/Transactions/requestBook/:bookId => Get book:", err);
                 retJson.status = 0;
@@ -150,11 +130,11 @@ exports.returnBook = function(req, res){
                     issued_to: user_id,
                     book_details: book_id,
                     due_date: due_date,
-                    transaction_type: 'Return'
+                    type: 'Return'
                 }
 
                 // Add new transaction to collection.
-                Transactions.create(transObj, createTransaction_returnBookCB(creErr, creDoc));
+                Transactions.create(transObj, createTransaction_returnBookCB);
             }
         })
     }
@@ -162,6 +142,51 @@ exports.returnBook = function(req, res){
         retJson.status = 0;
         retJson.msg = "'book_id' is required.";
         res.send(retJson);
+    }
+
+    function createTransaction_returnBookCB(err, doc){
+        if(err){
+            console.log("[Error] - POST api/Transactions/requestBook/:bookId => create transaction:", creErr);
+            retJson.status = 0;
+            retJson.msg = "Error in creating transaction.";
+            res.send(retJson);
+        }
+        else{
+            //Check if book is marked for removal.
+            if(is_removed){
+                Books.remove({_id: new ObjectId(book_id)}, function(remErr, remDoc){
+                    if(remErr){
+                        console.log("[Error] - POST api/Transactions/requestBook/:bookId => remove book:", remErr);
+                        retJson.status = 0;
+                        retJson.msg = "Error in removing book from database.";
+                        res.send(retJson);
+                    }
+                    else{
+                        retJson.status = 1;
+                        retJson.msg = "Book returned successfully and was removed after transaction.";
+                        res.send(retJson);
+                    }
+                })
+            }
+            else{
+                // If not marked for removal then update status of book.
+                Books.findOneAndUpdate({_id: new ObjectId(book_id)}, 
+                    {$set:{"is_issued": false, "issued_to": '', "due_date": ''}},
+                    function(updErr, updDoc){
+                    if(updErr){
+                        console.log("[Error] - POST api/Transactions/requestBook/:bookId => update book:", updErr);
+                        retJson.status = 0;
+                        retJson.msg = "Error in updating book status in database.";
+                        res.send(retJson);
+                    }
+                    else{
+                        retJson.status = 1;                                    
+                        retJson.msg = "Book returned successfully.";
+                        res.send(retJson);
+                    }
+                })
+            }
+        }
     }
 }
 
@@ -227,73 +252,5 @@ function requestIssueBookDV(reqTransData){
     }
 }
 
-function createTransaction_issueBookCB(err, doc){
-    if(err){
-        console.log("[Error] - POST api/Transactions/issueBook => create transaction:", err);
-        retJson.status = 0;
-        retJson.msg = "Error in issuing book.";
-        res.send(retJson);
-    }
-    else{
-        //Update Books collection with the transaction data.
-        Books.findOneAndUpdate(new ObjectId(req.body.book_id),
-            {$set:{"is_issued": true, "issued_to": req.body.user_id, "due_date": req.body.due_date}},
-            function(bookErr, bookDoc){
-            if(bookErr){
-                console.log("[Error] - POST api/Transactions/issueBook => update book collection:", bookErr);
-                retJson.status = 0;
-                retJson.msg = "Error in marking book as 'issued'";
-            }
-            else{
-                retJson.status = 1;
-                retJson.msg = "Book issued successfully.";
-                res.send(retJson);
-            }
-        });
-    }
-}
 
-function createTransaction_returnBookCB(err, doc){
-    if(creErr){
-        console.log("[Error] - POST api/Transactions/requestBook/:bookId => create transaction:", creErr);
-        retJson.status = 0;
-        retJson.msg = "Error in creating transaction.";
-        res.send(retJson);
-    }
-    else{
-        //Check if book is marked for removal.
-        if(is_removed){
-            Books.remove(new ObjectId(book_id), function(remErr, remDoc){
-                if(remErr){
-                    console.log("[Error] - POST api/Transactions/requestBook/:bookId => remove book:", remErr);
-                    retJson.status = 0;
-                    retJson.msg = "Error in removing book from database.";
-                    res.send(retJson);
-                }
-                else{
-                    retJson.status = 1;
-                    retJson.msg = "Book returned successfully and was removed after transaction.";
-                    res.send(retJson);
-                }
-            })
-        }
-        else{
-            // If not marked for removal then update status of book.
-            Books.findOneAndUpdate(new ObjectId(book_id), 
-                {$set:{"is_issued": false, "issued_to": '', "due_date": ''}},
-                function(updErr, updDoc){
-                if(updErr){
-                    console.log("[Error] - POST api/Transactions/requestBook/:bookId => update book:", updErr);
-                    retJson.status = 0;
-                    retJson.msg = "Error in updating book status in database.";
-                    res.send(retJson);
-                }
-                else{
-                    retJson.status = 1;                                    
-                    retJson.msg = "Book returned successfully.";
-                    res.send(retJson);
-                }
-            })
-        }
-    }
-}
+

@@ -10,7 +10,8 @@ exports.addUser = function(req, res){
     var email = req.body.email;
     req.body.phone = Boolean(req.body.phone) ? req.body.phone : '';
     
-    var userDataValidator = addUserDV(res.body);
+    console.log("userdata:", req.body);
+    var userDataValidator = addUserDV(req.body);
     if(userDataValidator.valid){
         Users.create(req.body, function(err, doc){
             if(err){
@@ -87,6 +88,7 @@ exports.getUser = function(req, res){
 }
 
 function addUserDV(userData){
+    console.log("DV data:", userData);
     var result = {
         valid: true,
         msg: ''

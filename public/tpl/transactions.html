@@ -1,7 +1,7 @@
-<link rel="stylesheet" type="text/css" href="../css/home.css">
+<link rel="stylesheet" type="text/css" href="../css/transactions.css">
 
-<div class="wrapper-md">
-    <div class="panel panel-default">
+<div class="wrapper-md fill">
+    <div class="panel panel-default fill">
         <div class="panel-heading"> 
             <div>Transactions</div>
         </div>
@@ -19,24 +19,17 @@
                     </tr>
                     </thead>
                     <tbody>
-                        <tr class="success">
-                            <td>1</td>
-                            <td>1/7/2017</td>
-                            <td>Issue</td>
-                            <td><span>Vikram Singh</span></td>
-                            <td><span>Wings Of Fire</span></td>                            
-                            <td>8/7/2017</td>                            
-                        </tr>
-                        <tr class="danger">
-                            <td>2</td>
-                            <td>8/7/2017</td>
-                            <td>Return</td>
-                            <td><span>Vikram Singh</span></td>
-                            <td><span>Wings Of Fire</span></td>
-                            <td>8/7/2017</td>                            
+                        <tr ng-repeat="transaction in allTransactions" ng-class="{'success': transaction.type == 'Issue', 'danger': transaction.type == 'Return'}">
+                            <td>{{$index + 1}}</td>
+                            <td>{{transaction.timestamp | date: "dd/MM/yyyy"}}</td>
+                            <td>{{transaction.type}}</td>
+                            <td><span>{{transaction.issued_to.name}}</span></td>
+                            <td><span>{{transaction.book_details.name}}</span></td>                            
+                            <td>{{transaction.due_date | date: "dd/MM/yyyy"}}</td>                            
                         </tr>
                     </tbody>
                 </table>
+                <div class="h3 text-center m-t-md" ng-show="allTransactions.length == 0">No Transactions Available.</div>
             </div>
             
         </div>
