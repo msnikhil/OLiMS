@@ -1,0 +1,13 @@
+{
+  "name": "olims",
+  "version": "1.0.0",
+  "dependencies": {
+    "bootstrap": "latest",
+    "font-awesome": "latest",
+    "animate.css": "latest",
+    "angular": "latest",
+    "angular-route": "latest",
+    "angular-ui-utils": "bower",
+    "AngularJS-Toaster": "angularjs-toaster#^2.1.0"
+  }
+}

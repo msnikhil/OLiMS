@@ -1,0 +1,56 @@
+<link rel="stylesheet" type="text/css" href="../css/manageBooks.css">
+<div class="wrapper-md fill">
+    <div class="panel panel-default fill">
+        <div class="panel-heading"> 
+            <div class="clearfix">
+                <div class="pull-left">Manage Books</div>
+                <button type="button" class="btn btn-primary pull-right" ng-click="addBook()">Add New Book</button>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="wrapper">
+                <div class="pageActions">
+                    <div class="searchFieldCont">
+                        <div class="searchField pull-left">
+                            <input type="text" class="form-control" ng-model="searchInput" placeholder="Search Books">
+                            <i class="glyphicon glyphicon-search"></i>
+                        </div>
+                        <span class="searchFieldOptions">
+                            <label class="radio-inline">
+                                <input type="radio" name="optradio" ng-model="searchOpt" ng-checked="searchOpt" value="name">
+                                By Name
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="optradio" ng-model="searchOpt" ng-checked="searchOpt" value="author">
+                                By Author
+                            </label>
+                        </span>
+                    </div>
+                </div>
+                <div class="booklistCont wrapper">
+                    <h3>All Books</h3>
+                    <div class="panel-group">
+                        <div class="panel panel-default" ng-repeat="book in allBooks | searchBookFilter : searchOpt : searchInput">
+                            <div class="panel-body bookCont">
+                                <div class="statusDot" ng-class="{ 'available': !book.is_issued, 'issued': book.is_issued }">
+                                    <i class="fa fa-circle" aria-hidden="true"></i>
+                                </div>
+                                <div class="bookInfoCont">
+                                    <div class="bookName" ng-bind="book.name">
+                                        
+                                    </div>
+                                    <div class="bookAuthor">
+                                        <i>By: {{book.author}}</i>
+                                    </div>
+                                </div>
+                                <div class="bookActionCont">
+                                    <button type="button" class="btn btn-danger" ng-disabled="book.is_removed" ng-click="removeBook(book._id)">Remove Book</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

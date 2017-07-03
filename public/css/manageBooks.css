@@ -1,0 +1,77 @@
+.panel-heading > div{
+    font-size: 24px;
+    margin: 10px 15px;
+}
+
+.pageActions{
+    font-family: HelveticaNeue;
+}
+
+.searchFieldCont{
+    margin-bottom: 20px;
+}
+
+.searchField{
+    width: 40%;
+    max-width: 400px;
+    position: relative;
+    margin-right: 30px;
+}
+
+.searchField i{
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    color: #999;
+}
+
+.searchFieldOptions{
+    display: inline-block;
+    padding: 5px 0px;
+}
+
+.booklistCont{
+    max-width: 800px;
+    font-family: HelveticaNeue;
+}
+
+.bookCont{
+    display: flex;
+    justify-content: space-between;
+}
+
+.statusDot{
+    margin: auto 20px;
+}
+
+.bookInfoCont{
+    margin: 0 auto 0 10px;
+}
+
+.bookName{
+    font-size: 22px;
+    font-family: HelveticaNeue-Light;
+    font-weight: bold;
+    letter-spacing: 0.7px;
+}
+
+.bookAuthor{
+    opacity: 0.7;
+    font-family: HelveticaNeue-Light;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+.bookActionCont{
+    min-width: 135px;
+    margin: auto 0;
+    text-align: center;
+}
+
+.statusDot.available{
+    color: #27c24c;
+}
+
+.statusDot.issued{
+    color: #f05050;;
+}

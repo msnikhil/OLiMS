@@ -1,0 +1,110 @@
+@font-face{
+    font-family: 'HelveticaNeue';
+    src: url("../fonts/Helvetica/helvetica-neue.ttf");
+}
+
+@font-face{
+    font-family: 'HelveticaNeue-Medium';
+    src: url("../fonts/Helvetica/helvetica-neue-medium.ttf");
+}
+
+@font-face{
+    font-family: 'HelveticaNeue-Light';
+    src: url("../fonts/Helvetica/helvetica-neue-light.ttf");
+}
+
+@font-face{
+    font-family: 'HelveticaNeue-Bold';
+    src: url("../fonts/Helvetica/helvetica-neue-bold.ttf");
+}
+
+@font-face{
+    font-family: 'HelveticaNeue-Roman';
+    src: url("../fonts/Helvetica/helvetica-55-roman.ttf");
+}
+
+body{
+    background-color: #eee;
+}
+
+a{
+    cursor: pointer;
+}
+
+.app-content{
+    margin-left: 200px;
+    margin-top: 60px;
+    background-color: #eee;
+    min-height: calc(100vh - 60px);
+}
+
+.fill{
+    height: 100%;
+}
+
+.panel.fill{
+    min-height: calc(100vh - 120px);
+}
+
+/*Paddings*/
+.wrapper-xs{
+    padding: 5px;
+}
+
+.wrapper-sm{
+    padding: 10px
+}
+
+.wrapper{
+    padding: 15px;
+}
+
+.wrapper-md{
+    padding: 20px;
+}
+
+.wrapper-lg{
+    padding: 30px;
+}
+
+/*Margins*/
+
+    /*Margin Left*/
+    .m-l-xs{
+        margin-left: 5px;
+    }
+    .m-l-sm{
+        margin-left: 10px;
+    }
+    .m-l{
+        margin-left: 15px;
+    }
+    .m-l-md{
+        margin-left: 20px;
+    }
+    .m-l-lg{
+        margin-left: 30px;
+    }
+    .m-l-xl{
+        margin-left: 50px;
+    }
+
+    /*Margin Top*/
+    .m-t-xs{
+        margin-top: 5px;
+    }
+    .m-t-sm{
+        margin-top: 10px;
+    }
+    .m-t{
+        margin-top: 15px;
+    }
+    .m-t-md{
+        margin-top: 20px;
+    }
+    .m-t-lg{
+        margin-top: 30px;
+    }
+    .m-t-xl{
+        margin-top: 50px;
+    }

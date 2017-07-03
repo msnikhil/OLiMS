@@ -1,0 +1,24 @@
+
+<link rel="stylesheet" type="text/css" href="../css/leftMenu.css">
+<div class="menuCont">
+    <ul>
+        <li>
+            <a href="/home" ng-class="{selected: $location.path() == '/home'}">
+                <i class="glyphicon glyphicon-pencil"></i>
+                Issue/Return Books
+            </a>
+        </li>
+        <li>
+            <a href="/manage-books" ng-class="{selected: $location.path() == '/manage-books'}">
+                <i class="glyphicon glyphicon-wrench"></i>
+                Manage Books
+            </a>
+        </li>
+        <li>
+            <a href="/transactions" ng-class="{selected: $location.path() == '/transactions'}">
+                <i class="glyphicon glyphicon-transfer"></i>
+                Transactions
+            </a>
+        </li>
+    </ul>
+</div>
